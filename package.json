@@ -8,7 +8,14 @@
         "build": "webpack && webpack --minify",
         "test": "karma start ./karma.conf.js",
         "benchmark": "./node_modules/karma/bin/karma start ./karma.benchmark.conf.js",
-        "watch": "webpack -w"
+        "watch": "webpack -w",
+        "compile-srcnodejs": "babel src\\node.js -o src\\node.js --require babel-polyfill --presets env",
+        "compile-srceasystarjs": "babel src\\easystar.js -o src\\easystar.js --require babel-polyfill --presets env",
+        "compile-srcinstancejs": "babel src\\instance.js -o src\\instance.js --require babel-polyfill --presets env",
+        "compile-testeasystarbenchmarkjs": "babel test\\easystarbenchmark.js -o test\\easystarbenchmark.js --require babel-polyfill --presets env",
+        "compile-testeasystartestjs": "babel test\\easystartest.js -o test\\easystartest.js --require babel-polyfill --presets env",
+        "compile-1_script": "npm run compile-srcnodejs && npm run compile-srceasystarjs && npm run compile-srcinstancejs && npm run compile-testeasystarbenchmarkjs && npm run compile-testeasystartestjs",
+        "compile": "npm run compile-1_script"
     },
     "keywords": [
         "A*",
@@ -28,9 +35,15 @@
         "url": "http://bryce.is"
     },
     "devDependencies": {
-        "babel-core": "^6.8.0",
+        "babel-core": "latest",
         "babel-loader": "^6.2.4",
-        "webpack": "^1.13.0"
+        "webpack": "^1.13.0",
+        "babel-cli": "latest",
+        "babel-plugin-add-module-exports": "latest",
+        "babel-plugin-transform-es2015-modules-commonjs": "latest",
+        "babel-polyfill": "latest",
+        "babel-preset-env": "latest",
+        "babel-preset-es2015-without-strict": "latest"
     },
     "dependencies": {
         "heap": "0.2.6",
