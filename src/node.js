@@ -1,4 +1,9 @@
-var exportedObject = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var exportedObject = function exportedObject(parent, x, y, costSoFar, simpleDistanceToTarget) {
     this.parent = parent;
     this.x = x;
     this.y = y;
@@ -8,9 +13,9 @@ var exportedObject = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
     /**
     * @return {Number} Best guess distance of a cost using this node.
     **/
-    this.bestGuessDistance = function() {
+    this.bestGuessDistance = function () {
         return this.costSoFar + this.simpleDistanceToTarget;
-    }
+    };
 };
 
 /**
@@ -21,4 +26,4 @@ var exportedObject = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
 * @param {Number} costSoFar How far this node is in moves*cost from the start.
 * @param {Number} simpleDistanceToTarget Manhatten distance to the end point.
 **/
-export { exportedObject as nodejs };
+exports.nodejs = exportedObject;
