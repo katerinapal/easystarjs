@@ -1,8 +1,4 @@
-/**
- * Represents a single instance of EasyStar.
- * A path that is in the queue to eventually be found.
- */
-module.exports = function() {
+var exportedObject = function() {
     this.pointsToAvoid = {};
     this.startX;
     this.callback;
@@ -12,3 +8,9 @@ module.exports = function() {
     this.nodeHash = {};
     this.openList;
 };
+
+/**
+ * Represents a single instance of EasyStar.
+ * A path that is in the queue to eventually be found.
+ */
+export { exportedObject as instancejs };
