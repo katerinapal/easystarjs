@@ -1,24 +1,22 @@
-/**
-*   EasyStar.js
-*   github.com/prettymuchbryce/EasyStarJS
-*   Licensed under the MIT license.
-*
-*   Implementation By Bryce Neal (@prettymuchbryce)
-**/
-
-var EasyStar = {}
-var Instance = require('./instance');
-var Node = require('./node');
-var Heap = require('heap');
+var TOP_LEFT;
+var LEFT;
+var BOTTOM_LEFT;
+var BOTTOM;
+var BOTTOM_RIGHT;
+var RIGHT;
+var TOP_RIGHT;
+var TOP;
+var js;
+import { instance as Instance } from "./instance";
+import { node as Node } from "./node";
+import ext_Heap from "heap";
 
 const CLOSED_LIST = 0;
 const OPEN_LIST = 1;
 
-module.exports = EasyStar;
-
 var nextInstanceId = 1;
 
-EasyStar.js = function() {
+js = function() {
     var STRAIGHT_COST = 1.0;
     var DIAGONAL_COST = 1.4;
     var syncEnabled = false;
@@ -288,7 +286,7 @@ EasyStar.js = function() {
 
         // Create the instance
         var instance = new Instance();
-        instance.openList = new Heap(function(nodeA, nodeB) {
+        instance.openList = new ext_Heap(function(nodeA, nodeB) {
             return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
         });
         instance.isDoneCalculating = false;
@@ -493,14 +491,14 @@ EasyStar.js = function() {
      * -1,  1 | 0,  1  | 1,  1
      */
     var calculateDirection = function (diffX, diffY) {
-        if (diffX === 0 && diffY === -1) return EasyStar.TOP
-        else if (diffX === 1 && diffY === -1) return EasyStar.TOP_RIGHT
-        else if (diffX === 1 && diffY === 0) return EasyStar.RIGHT
-        else if (diffX === 1 && diffY === 1) return EasyStar.BOTTOM_RIGHT
-        else if (diffX === 0 && diffY === 1) return EasyStar.BOTTOM
-        else if (diffX === -1 && diffY === 1) return EasyStar.BOTTOM_LEFT
-        else if (diffX === -1 && diffY === 0) return EasyStar.LEFT
-        else if (diffX === -1 && diffY === -1) return EasyStar.TOP_LEFT
+        if (diffX === 0 && diffY === -1) return TOP;
+        else if (diffX === 1 && diffY === -1) return TOP_RIGHT;
+        else if (diffX === 1 && diffY === 0) return RIGHT;
+        else if (diffX === 1 && diffY === 1) return BOTTOM_RIGHT;
+        else if (diffX === 0 && diffY === 1) return BOTTOM;
+        else if (diffX === -1 && diffY === 1) return BOTTOM_LEFT;
+        else if (diffX === -1 && diffY === 0) return LEFT;
+        else if (diffX === -1 && diffY === -1) return TOP_LEFT;
         throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
     };
 
@@ -546,11 +544,12 @@ EasyStar.js = function() {
     };
 }
 
-EasyStar.TOP = 'TOP'
-EasyStar.TOP_RIGHT = 'TOP_RIGHT'
-EasyStar.RIGHT = 'RIGHT'
-EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT'
-EasyStar.BOTTOM = 'BOTTOM'
-EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT'
-EasyStar.LEFT = 'LEFT'
-EasyStar.TOP_LEFT = 'TOP_LEFT'
+TOP = 'TOP'
+TOP_RIGHT = 'TOP_RIGHT'
+RIGHT = 'RIGHT'
+BOTTOM_RIGHT = 'BOTTOM_RIGHT'
+BOTTOM = 'BOTTOM'
+BOTTOM_LEFT = 'BOTTOM_LEFT'
+LEFT = 'LEFT'
+TOP_LEFT = 'TOP_LEFT'
+export { js, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT };

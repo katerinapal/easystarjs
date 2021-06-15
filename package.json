@@ -8,7 +8,12 @@
         "build": "webpack && webpack --minify",
         "test": "karma start ./karma.conf.js",
         "benchmark": "./node_modules/karma/bin/karma start ./karma.benchmark.conf.js",
-        "watch": "webpack -w"
+        "watch": "webpack -w",
+        "compile-src": "babel src --out-dir src --require babel-polyfill --presets env",
+        "compile-coverageChrome 9104472 Windows 10 000": "babel coverage\\Chrome 91.0.4472 (Windows 10 0.0.0) --out-dir coverage\\Chrome 91.0.4472 (Windows 10 0.0.0) --require babel-polyfill --presets env",
+        "compile-test": "babel test --out-dir test --require babel-polyfill --presets env",
+        "compile-1_script": "npm run compile-src && npm run compile-coverageChrome 9104472 Windows 10 000 && npm run compile-test",
+        "compile": "npm run compile-1_script"
     },
     "keywords": [
         "A*",
@@ -28,9 +33,15 @@
         "url": "http://bryce.is"
     },
     "devDependencies": {
-        "babel-core": "^6.8.0",
+        "babel-core": "latest",
         "babel-loader": "^6.2.4",
-        "webpack": "^1.13.0"
+        "webpack": "^1.13.0",
+        "babel-cli": "latest",
+        "babel-plugin-add-module-exports": "latest",
+        "babel-plugin-transform-es2015-modules-commonjs": "latest",
+        "babel-polyfill": "latest",
+        "babel-plugin-transform-object-rest-spread": "latest",
+        "babel-preset-env": "latest"
     },
     "dependencies": {
         "heap": "0.2.6",
