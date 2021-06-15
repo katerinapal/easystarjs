@@ -1,4 +1,9 @@
-var mod_anonymus = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var mod_anonymus = function mod_anonymus(parent, x, y, costSoFar, simpleDistanceToTarget) {
     this.parent = parent;
     this.x = x;
     this.y = y;
@@ -8,9 +13,9 @@ var mod_anonymus = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
     /**
     * @return {Number} Best guess distance of a cost using this node.
     **/
-    this.bestGuessDistance = function() {
+    this.bestGuessDistance = function () {
         return this.costSoFar + this.simpleDistanceToTarget;
-    }
+    };
 };
 
 /**
@@ -21,7 +26,7 @@ var mod_anonymus = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
 * @param {Number} costSoFar How far this node is in moves*cost from the start.
 * @param {Number} simpleDistanceToTarget Manhatten distance to the end point.
 **/
-mod_anonymus = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
+exports.node = mod_anonymus = function mod_anonymus(parent, x, y, costSoFar, simpleDistanceToTarget) {
     this.parent = parent;
     this.x = x;
     this.y = y;
@@ -31,9 +36,9 @@ mod_anonymus = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
     /**
     * @return {Number} Best guess distance of a cost using this node.
     **/
-    this.bestGuessDistance = function() {
+    this.bestGuessDistance = function () {
         return this.costSoFar + this.simpleDistanceToTarget;
-    }
+    };
 };
 
 /**
@@ -44,4 +49,4 @@ mod_anonymus = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
 * @param {Number} costSoFar How far this node is in moves*cost from the start.
 * @param {Number} simpleDistanceToTarget Manhatten distance to the end point.
 **/
-export { mod_anonymus as node };
+exports.node = mod_anonymus;

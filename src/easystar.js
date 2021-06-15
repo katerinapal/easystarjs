@@ -1,3 +1,20 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.TOP_LEFT = exports.LEFT = exports.BOTTOM_LEFT = exports.BOTTOM = exports.BOTTOM_RIGHT = exports.RIGHT = exports.TOP_RIGHT = exports.TOP = exports.js = undefined;
+
+var _instance = require("./instance");
+
+var _node = require("./node");
+
+var _heap = require("heap");
+
+var _heap2 = _interopRequireDefault(_heap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var TOP_LEFT;
 var LEFT;
 var BOTTOM_LEFT;
@@ -7,16 +24,14 @@ var RIGHT;
 var TOP_RIGHT;
 var TOP;
 var js;
-import { instance as Instance } from "./instance";
-import { node as Node } from "./node";
-import ext_Heap from "heap";
 
-const CLOSED_LIST = 0;
-const OPEN_LIST = 1;
+
+var CLOSED_LIST = 0;
+var OPEN_LIST = 1;
 
 var nextInstanceId = 1;
 
-js = function() {
+exports.js = js = function js() {
     var STRAIGHT_COST = 1.0;
     var DIAGONAL_COST = 1.4;
     var syncEnabled = false;
@@ -40,7 +55,7 @@ js = function() {
     * which tiles in your grid should be considered
     * acceptable, or "walkable".
     **/
-    this.setAcceptableTiles = function(tiles) {
+    this.setAcceptableTiles = function (tiles) {
         if (tiles instanceof Array) {
             // Array
             acceptableTiles = tiles;
@@ -54,30 +69,30 @@ js = function() {
     * Enables sync mode for this EasyStar instance..
     * if you're into that sort of thing.
     **/
-    this.enableSync = function() {
+    this.enableSync = function () {
         syncEnabled = true;
     };
 
     /**
     * Disables sync mode for this EasyStar instance.
     **/
-    this.disableSync = function() {
+    this.disableSync = function () {
         syncEnabled = false;
     };
 
     /**
      * Enable diagonal pathfinding.
      */
-    this.enableDiagonals = function() {
+    this.enableDiagonals = function () {
         diagonalsEnabled = true;
-    }
+    };
 
     /**
      * Disable diagonal pathfinding.
      */
-    this.disableDiagonals = function() {
+    this.disableDiagonals = function () {
         diagonalsEnabled = false;
-    }
+    };
 
     /**
     * Sets the collision grid that EasyStar uses.
@@ -85,14 +100,14 @@ js = function() {
     * @param {Array} grid The collision grid that this EasyStar instance will read from.
     * This should be a 2D Array of Numbers.
     **/
-    this.setGrid = function(grid) {
+    this.setGrid = function (grid) {
         collisionGrid = grid;
 
         //Setup cost map
         for (var y = 0; y < collisionGrid.length; y++) {
             for (var x = 0; x < collisionGrid[0].length; x++) {
                 if (!costMap[collisionGrid[y][x]]) {
-                    costMap[collisionGrid[y][x]] = 1
+                    costMap[collisionGrid[y][x]] = 1;
                 }
             }
         }
@@ -104,7 +119,7 @@ js = function() {
     * @param {Number} The tile type to set the cost for.
     * @param {Number} The multiplicative cost associated with the given tile.
     **/
-    this.setTileCost = function(tileType, cost) {
+    this.setTileCost = function (tileType, cost) {
         costMap[tileType] = cost;
     };
 
@@ -116,7 +131,7 @@ js = function() {
     * @param {Number} y The y value of the point to cost.
     * @param {Number} The multiplicative cost associated with the given point.
     **/
-    this.setAdditionalPointCost = function(x, y, cost) {
+    this.setAdditionalPointCost = function (x, y, cost) {
         if (pointsToCost[y] === undefined) {
             pointsToCost[y] = {};
         }
@@ -129,18 +144,18 @@ js = function() {
     * @param {Number} x The x value of the point to stop costing.
     * @param {Number} y The y value of the point to stop costing.
     **/
-    this.removeAdditionalPointCost = function(x, y) {
+    this.removeAdditionalPointCost = function (x, y) {
         if (pointsToCost[y] !== undefined) {
             delete pointsToCost[y][x];
         }
-    }
+    };
 
     /**
     * Remove all additional point costs.
     **/
-    this.removeAllAdditionalPointCosts = function() {
+    this.removeAllAdditionalPointCosts = function () {
         pointsToCost = {};
-    }
+    };
 
     /**
     * Sets a directional condition on a tile
@@ -150,7 +165,7 @@ js = function() {
     * @param {Array.<String>} allowedDirections A list of all the allowed directions that can access
     * the tile.
     **/
-    this.setDirectionalCondition = function(x, y, allowedDirections) {
+    this.setDirectionalCondition = function (x, y, allowedDirections) {
         if (directionalConditions[y] === undefined) {
             directionalConditions[y] = {};
         }
@@ -160,7 +175,7 @@ js = function() {
     /**
     * Remove all directional conditions
     **/
-    this.removeAllDirectionalConditions = function() {
+    this.removeAllDirectionalConditions = function () {
         directionalConditions = {};
     };
 
@@ -172,7 +187,7 @@ js = function() {
     *
     * @param {Number} iterations The number of searches to prefrom per calculate() call.
     **/
-    this.setIterationsPerCalculation = function(iterations) {
+    this.setIterationsPerCalculation = function (iterations) {
         iterationsPerCalculation = iterations;
     };
 
@@ -183,7 +198,7 @@ js = function() {
     * @param {Number} x The x value of the point to avoid.
     * @param {Number} y The y value of the point to avoid.
     **/
-    this.avoidAdditionalPoint = function(x, y) {
+    this.avoidAdditionalPoint = function (x, y) {
         if (pointsToAvoid[y] === undefined) {
             pointsToAvoid[y] = {};
         }
@@ -196,7 +211,7 @@ js = function() {
     * @param {Number} x The x value of the point to stop avoiding.
     * @param {Number} y The y value of the point to stop avoiding.
     **/
-    this.stopAvoidingAdditionalPoint = function(x, y) {
+    this.stopAvoidingAdditionalPoint = function (x, y) {
         if (pointsToAvoid[y] !== undefined) {
             delete pointsToAvoid[y][x];
         }
@@ -205,21 +220,21 @@ js = function() {
     /**
     * Enables corner cutting in diagonal movement.
     **/
-    this.enableCornerCutting = function() {
+    this.enableCornerCutting = function () {
         allowCornerCutting = true;
     };
 
     /**
     * Disables corner cutting in diagonal movement.
     **/
-    this.disableCornerCutting = function() {
+    this.disableCornerCutting = function () {
         allowCornerCutting = false;
     };
 
     /**
     * Stop avoiding all additional points on the grid.
     **/
-    this.stopAvoidingAllAdditionalPoints = function() {
+    this.stopAvoidingAllAdditionalPoints = function () {
         pointsToAvoid = {};
     };
 
@@ -235,17 +250,17 @@ js = function() {
     * @return {Number} A numeric, non-zero value which identifies the created instance. This value can be passed to cancelPath to cancel the path calculation.
     *
     **/
-    this.findPath = function(startX, startY, endX, endY, callback) {
+    this.findPath = function (startX, startY, endX, endY, callback) {
         // Wraps the callback for sync vs async logic
-        var callbackWrapper = function(result) {
+        var callbackWrapper = function callbackWrapper(result) {
             if (syncEnabled) {
                 callback(result);
             } else {
-                setTimeout(function() {
+                setTimeout(function () {
                     callback(result);
                 });
             }
-        }
+        };
 
         // No acceptable tiles were set
         if (acceptableTiles === undefined) {
@@ -257,14 +272,12 @@ js = function() {
         }
 
         // Start or endpoint outside of scope.
-        if (startX < 0 || startY < 0 || endX < 0 || endY < 0 ||
-        startX > collisionGrid[0].length-1 || startY > collisionGrid.length-1 ||
-        endX > collisionGrid[0].length-1 || endY > collisionGrid.length-1) {
+        if (startX < 0 || startY < 0 || endX < 0 || endY < 0 || startX > collisionGrid[0].length - 1 || startY > collisionGrid.length - 1 || endX > collisionGrid[0].length - 1 || endY > collisionGrid.length - 1) {
             throw new Error("Your start or end point is outside the scope of your grid.");
         }
 
         // Start and end are the same tile.
-        if (startX===endX && startY===endY) {
+        if (startX === endX && startY === endY) {
             callbackWrapper([]);
             return;
         }
@@ -285,8 +298,8 @@ js = function() {
         }
 
         // Create the instance
-        var instance = new Instance();
-        instance.openList = new ext_Heap(function(nodeA, nodeB) {
+        var instance = new _instance.instance();
+        instance.openList = new _heap2.default(function (nodeA, nodeB) {
             return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
         });
         instance.isDoneCalculating = false;
@@ -297,10 +310,9 @@ js = function() {
         instance.endY = endY;
         instance.callback = callbackWrapper;
 
-        instance.openList.push(coordinateToNode(instance, instance.startX,
-            instance.startY, null, STRAIGHT_COST));
+        instance.openList.push(coordinateToNode(instance, instance.startX, instance.startY, null, STRAIGHT_COST));
 
-        var instanceId = nextInstanceId ++;
+        var instanceId = nextInstanceId++;
         instances[instanceId] = instance;
         instanceQueue.push(instanceId);
         return instanceId;
@@ -313,7 +325,7 @@ js = function() {
      * @return {Boolean} True if an instance was found and cancelled.
      *
      **/
-    this.cancelPath = function(instanceId) {
+    this.cancelPath = function (instanceId) {
         if (instanceId in instances) {
             delete instances[instanceId];
             // No need to remove it from instanceQueue
@@ -328,7 +340,7 @@ js = function() {
     * You can change the number of calculations done in a call by using
     * easystar.setIteratonsPerCalculation().
     **/
-    this.calculate = function() {
+    this.calculate = function () {
         if (instanceQueue.length === 0 || collisionGrid === undefined || acceptableTiles === undefined) {
             return;
         }
@@ -363,10 +375,10 @@ js = function() {
             // Handles the case where we have found the destination
             if (instance.endX === searchNode.x && instance.endY === searchNode.y) {
                 var path = [];
-                path.push({x: searchNode.x, y: searchNode.y});
+                path.push({ x: searchNode.x, y: searchNode.y });
                 var parent = searchNode.parent;
-                while (parent!=null) {
-                    path.push({x: parent.x, y:parent.y});
+                while (parent != null) {
+                    path.push({ x: parent.x, y: parent.y });
                     parent = parent.parent;
                 }
                 path.reverse();
@@ -380,77 +392,57 @@ js = function() {
             searchNode.list = CLOSED_LIST;
 
             if (searchNode.y > 0) {
-                checkAdjacentNode(instance, searchNode,
-                    0, -1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y-1));
+                checkAdjacentNode(instance, searchNode, 0, -1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y - 1));
             }
-            if (searchNode.x < collisionGrid[0].length-1) {
-                checkAdjacentNode(instance, searchNode,
-                    1, 0, STRAIGHT_COST * getTileCost(searchNode.x+1, searchNode.y));
+            if (searchNode.x < collisionGrid[0].length - 1) {
+                checkAdjacentNode(instance, searchNode, 1, 0, STRAIGHT_COST * getTileCost(searchNode.x + 1, searchNode.y));
             }
-            if (searchNode.y < collisionGrid.length-1) {
-                checkAdjacentNode(instance, searchNode,
-                    0, 1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y+1));
+            if (searchNode.y < collisionGrid.length - 1) {
+                checkAdjacentNode(instance, searchNode, 0, 1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y + 1));
             }
             if (searchNode.x > 0) {
-                checkAdjacentNode(instance, searchNode,
-                    -1, 0, STRAIGHT_COST * getTileCost(searchNode.x-1, searchNode.y));
+                checkAdjacentNode(instance, searchNode, -1, 0, STRAIGHT_COST * getTileCost(searchNode.x - 1, searchNode.y));
             }
             if (diagonalsEnabled) {
                 if (searchNode.x > 0 && searchNode.y > 0) {
 
-                    if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1, searchNode) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y, searchNode))) {
+                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y - 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x - 1, searchNode.y, searchNode)) {
 
-                        checkAdjacentNode(instance, searchNode,
-                            -1, -1, DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y-1));
+                        checkAdjacentNode(instance, searchNode, -1, -1, DIAGONAL_COST * getTileCost(searchNode.x - 1, searchNode.y - 1));
                     }
                 }
-                if (searchNode.x < collisionGrid[0].length-1 && searchNode.y < collisionGrid.length-1) {
+                if (searchNode.x < collisionGrid[0].length - 1 && searchNode.y < collisionGrid.length - 1) {
 
-                    if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1, searchNode) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y, searchNode))) {
+                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y + 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x + 1, searchNode.y, searchNode)) {
 
-                        checkAdjacentNode(instance, searchNode,
-                            1, 1, DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y+1));
+                        checkAdjacentNode(instance, searchNode, 1, 1, DIAGONAL_COST * getTileCost(searchNode.x + 1, searchNode.y + 1));
                     }
                 }
-                if (searchNode.x < collisionGrid[0].length-1 && searchNode.y > 0) {
+                if (searchNode.x < collisionGrid[0].length - 1 && searchNode.y > 0) {
 
-                    if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1, searchNode) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y, searchNode))) {
+                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y - 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x + 1, searchNode.y, searchNode)) {
 
-                        checkAdjacentNode(instance, searchNode,
-                            1, -1, DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y-1));
+                        checkAdjacentNode(instance, searchNode, 1, -1, DIAGONAL_COST * getTileCost(searchNode.x + 1, searchNode.y - 1));
                     }
                 }
-                if (searchNode.x > 0 && searchNode.y < collisionGrid.length-1) {
+                if (searchNode.x > 0 && searchNode.y < collisionGrid.length - 1) {
 
-                    if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1, searchNode) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y, searchNode))) {
+                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y + 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x - 1, searchNode.y, searchNode)) {
 
-                        checkAdjacentNode(instance, searchNode,
-                            -1, 1, DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y+1));
+                        checkAdjacentNode(instance, searchNode, -1, 1, DIAGONAL_COST * getTileCost(searchNode.x - 1, searchNode.y + 1));
                     }
                 }
             }
-
         }
     };
 
     // Private methods follow
-    var checkAdjacentNode = function(instance, searchNode, x, y, cost) {
-        var adjacentCoordinateX = searchNode.x+x;
-        var adjacentCoordinateY = searchNode.y+y;
+    var checkAdjacentNode = function checkAdjacentNode(instance, searchNode, x, y, cost) {
+        var adjacentCoordinateX = searchNode.x + x;
+        var adjacentCoordinateY = searchNode.y + y;
 
-        if ((pointsToAvoid[adjacentCoordinateY] === undefined ||
-             pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) &&
-            isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
-            var node = coordinateToNode(instance, adjacentCoordinateX,
-                adjacentCoordinateY, searchNode, cost);
+        if ((pointsToAvoid[adjacentCoordinateY] === undefined || pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) && isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
+            var node = coordinateToNode(instance, adjacentCoordinateX, adjacentCoordinateY, searchNode, cost);
 
             if (node.list === undefined) {
                 node.list = OPEN_LIST;
@@ -464,17 +456,17 @@ js = function() {
     };
 
     // Helpers
-    var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
+    var isTileWalkable = function isTileWalkable(collisionGrid, acceptableTiles, x, y, sourceNode) {
         var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
         if (directionalCondition) {
-            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
-            var directionIncluded = function () {
+            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y);
+            var directionIncluded = function directionIncluded() {
                 for (var i = 0; i < directionalCondition.length; i++) {
-                    if (directionalCondition[i] === direction) return true
+                    if (directionalCondition[i] === direction) return true;
                 }
-                return false
-            }
-            if (!directionIncluded()) return false
+                return false;
+            };
+            if (!directionIncluded()) return false;
         }
         for (var i = 0; i < acceptableTiles.length; i++) {
             if (collisionGrid[y][x] === acceptableTiles[i]) {
@@ -490,23 +482,16 @@ js = function() {
      * -1,  0 | SOURCE | 1,  0
      * -1,  1 | 0,  1  | 1,  1
      */
-    var calculateDirection = function (diffX, diffY) {
-        if (diffX === 0 && diffY === -1) return TOP;
-        else if (diffX === 1 && diffY === -1) return TOP_RIGHT;
-        else if (diffX === 1 && diffY === 0) return RIGHT;
-        else if (diffX === 1 && diffY === 1) return BOTTOM_RIGHT;
-        else if (diffX === 0 && diffY === 1) return BOTTOM;
-        else if (diffX === -1 && diffY === 1) return BOTTOM_LEFT;
-        else if (diffX === -1 && diffY === 0) return LEFT;
-        else if (diffX === -1 && diffY === -1) return TOP_LEFT;
-        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
+    var calculateDirection = function calculateDirection(diffX, diffY) {
+        if (diffX === 0 && diffY === -1) return TOP;else if (diffX === 1 && diffY === -1) return TOP_RIGHT;else if (diffX === 1 && diffY === 0) return RIGHT;else if (diffX === 1 && diffY === 1) return BOTTOM_RIGHT;else if (diffX === 0 && diffY === 1) return BOTTOM;else if (diffX === -1 && diffY === 1) return BOTTOM_LEFT;else if (diffX === -1 && diffY === 0) return LEFT;else if (diffX === -1 && diffY === -1) return TOP_LEFT;
+        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY);
     };
 
-    var getTileCost = function(x, y) {
-        return (pointsToCost[y] && pointsToCost[y][x]) || costMap[collisionGrid[y][x]]
+    var getTileCost = function getTileCost(x, y) {
+        return pointsToCost[y] && pointsToCost[y][x] || costMap[collisionGrid[y][x]];
     };
 
-    var coordinateToNode = function(instance, x, y, parent, cost) {
+    var coordinateToNode = function coordinateToNode(instance, x, y, parent, cost) {
         if (instance.nodeHash[y] !== undefined) {
             if (instance.nodeHash[y][x] !== undefined) {
                 return instance.nodeHash[y][x];
@@ -515,17 +500,17 @@ js = function() {
             instance.nodeHash[y] = {};
         }
         var simpleDistanceToTarget = getDistance(x, y, instance.endX, instance.endY);
-        if (parent!==null) {
+        if (parent !== null) {
             var costSoFar = parent.costSoFar + cost;
         } else {
             costSoFar = 0;
         }
-        var node = new Node(parent,x,y,costSoFar,simpleDistanceToTarget);
+        var node = new _node.node(parent, x, y, costSoFar, simpleDistanceToTarget);
         instance.nodeHash[y][x] = node;
         return node;
     };
 
-    var getDistance = function(x1,y1,x2,y2) {
+    var getDistance = function getDistance(x1, y1, x2, y2) {
         if (diagonalsEnabled) {
             // Octile distance
             var dx = Math.abs(x1 - x2);
@@ -539,17 +524,25 @@ js = function() {
             // Manhattan distance
             var dx = Math.abs(x1 - x2);
             var dy = Math.abs(y1 - y2);
-            return (dx + dy);
+            return dx + dy;
         }
     };
-}
+};
 
-TOP = 'TOP'
-TOP_RIGHT = 'TOP_RIGHT'
-RIGHT = 'RIGHT'
-BOTTOM_RIGHT = 'BOTTOM_RIGHT'
-BOTTOM = 'BOTTOM'
-BOTTOM_LEFT = 'BOTTOM_LEFT'
-LEFT = 'LEFT'
-TOP_LEFT = 'TOP_LEFT'
-export { js, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT };
+exports.TOP = TOP = 'TOP';
+exports.TOP_RIGHT = TOP_RIGHT = 'TOP_RIGHT';
+exports.RIGHT = RIGHT = 'RIGHT';
+exports.BOTTOM_RIGHT = BOTTOM_RIGHT = 'BOTTOM_RIGHT';
+exports.BOTTOM = BOTTOM = 'BOTTOM';
+exports.BOTTOM_LEFT = BOTTOM_LEFT = 'BOTTOM_LEFT';
+exports.LEFT = LEFT = 'LEFT';
+exports.TOP_LEFT = TOP_LEFT = 'TOP_LEFT';
+exports.js = js;
+exports.TOP = TOP;
+exports.TOP_RIGHT = TOP_RIGHT;
+exports.RIGHT = RIGHT;
+exports.BOTTOM_RIGHT = BOTTOM_RIGHT;
+exports.BOTTOM = BOTTOM;
+exports.BOTTOM_LEFT = BOTTOM_LEFT;
+exports.LEFT = LEFT;
+exports.TOP_LEFT = TOP_LEFT;

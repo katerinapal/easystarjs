@@ -1,4 +1,9 @@
-var mod_anonymus = function() {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var mod_anonymus = function mod_anonymus() {
     this.pointsToAvoid = {};
     this.startX;
     this.callback;
@@ -13,7 +18,7 @@ var mod_anonymus = function() {
  * Represents a single instance of EasyStar.
  * A path that is in the queue to eventually be found.
  */
-mod_anonymus = function() {
+exports.instance = mod_anonymus = function mod_anonymus() {
     this.pointsToAvoid = {};
     this.startX;
     this.callback;
@@ -28,4 +33,4 @@ mod_anonymus = function() {
  * Represents a single instance of EasyStar.
  * A path that is in the queue to eventually be found.
  */
-export { mod_anonymus as instance };
+exports.instance = mod_anonymus;
